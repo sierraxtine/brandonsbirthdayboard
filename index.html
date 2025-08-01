@@ -12,7 +12,7 @@
       background: black;
       font-family: 'Orbitron', sans-serif;
       color: #00ffcc;
-      overflow: hidden;
+      overflow-x: hidden;
     }
     canvas#confetti-canvas {
       position: fixed;
@@ -86,21 +86,23 @@
       max-width: 300px;
     }
     #messages {
-      position: absolute;
+      position: fixed;
       width: 100%;
-      top: 180px;
-      bottom: 160px;
+      top: 140px;
+      bottom: 220px;
       overflow: hidden;
       font-size: 1.2em;
       z-index: 2;
       display: flex;
-      justify-content: center;
+      justify-content: flex-end;
+      align-items: center;
+      flex-direction: column;
+      pointer-events: none;
     }
     .scroll-container {
       display: flex;
       flex-direction: column;
-      animation: scrollUp 120s linear infinite;
-      padding-bottom: 200vh;
+      animation: scrollUp 60s linear infinite;
       align-items: center;
     }
     @keyframes scrollUp {
@@ -110,18 +112,19 @@
     .message-entry {
       padding: 10px;
       font-weight: bold;
-      white-space: nowrap;
       text-align: center;
+      white-space: normal;
+      word-break: break-word;
     }
     @media (max-width: 600px) {
       h1 { font-size: 2em; }
       #countdown { font-size: 1.2em; }
       input, button { font-size: 0.9em; max-width: 90%; }
       .message-box { width: 100%; bottom: 0; }
-      .message-entry { font-size: 1em; padding: 8px; white-space: normal; word-break: break-word; }
+      .message-entry { font-size: 1em; padding: 8px; }
       #messages {
-        top: 200px;
-        bottom: 200px;
+        top: 180px;
+        bottom: 220px;
       }
     }
   </style>
@@ -171,7 +174,6 @@
     .onSnapshot(snapshot => {
       const wrapper = document.getElementById("messageWrapper");
       wrapper.innerHTML = "";
-      const messages = [];
       snapshot.forEach(doc => {
         const d = doc.data();
         if (d.name && d.wish) {
@@ -179,10 +181,9 @@
           div.className = "message-entry";
           div.textContent = `🎈 ${d.name}: ${d.wish}`;
           div.style.color = getRandomColor();
-          messages.push(div.outerHTML);
+          wrapper.appendChild(div);
         }
       });
-      wrapper.innerHTML = messages.concat(messages).join("");
     });
 </script>
 <script>
