@@ -1,231 +1,183 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🎉 Happy Birthday Brandon! 🎉</title>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🎉 Happy Birthday Brandon 🎉</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap"/>
   <style>
-    body {
+    html, body {
       margin: 0;
       padding: 0;
-      background-color: #000010;
-      color: #ffffff;
-      font-family: 'Orbitron', sans-serif;
       overflow: hidden;
+      background: black;
+      font-family: 'Orbitron', sans-serif;
+      color: #00ffcc;
+    }
+    canvas#confetti-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: 0;
+      pointer-events: none;
     }
     h1 {
+      font-size: 4em;
       text-align: center;
-      font-size: 6em;
-      background: linear-gradient(45deg, #0ff, #0f0, #f90, #f04);
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-      text-shadow:
-        0 0 10px #00ffff,
-        0 0 20px #00ff00,
-        0 0 30px #ff0040;
-      animation: glowShift 4s linear infinite;
+      margin-top: 2vh;
+      animation: glow 3s infinite alternate, rainbow 5s infinite linear;
+      color: #00fff0;
+      text-shadow: 1px 1px 0 #0ff, 2px 2px 0 #00f, 3px 3px 0 #0ff, 4px 4px 10px #0ff;
+      z-index: 2;
+      position: relative;
     }
-    @keyframes glowShift {
-      0% { filter: hue-rotate(0deg); }
-      100% { filter: hue-rotate(360deg); }
+    @keyframes glow {
+      from { text-shadow: 1px 1px 2px #0ff; }
+      to { text-shadow: 2px 2px 20px #0ff, 0 0 40px #0ff, 0 0 60px #0ff; }
     }
-    #countdown {
-      font-size: 2.5em;
-      font-weight: bold;
-      text-align: center;
-      color: #ffffff;
-      margin-top: 20px;
-      animation: pop 1s ease-in-out infinite alternate;
-      text-shadow: 0 0 15px #ff0040, 0 0 25px #00ffcc, 0 0 30px #ff6a00;
+    @keyframes rainbow {
+      0% { color: #ff0040; }
+      25% { color: #ff9900; }
+      50% { color: #00ff00; }
+      75% { color: #0099ff; }
+      100% { color: #ff00ff; }
     }
-    .image-flow img {
+    .floating-img {
       position: absolute;
-      width: 600px;
-      animation: floatUp 40s linear infinite;
-      z-index: 0;
-    }
-    #messages {
-      position: fixed;
-      bottom: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 90%;
-      max-height: 300px;
-      overflow-y: auto;
-      background: rgba(0, 5, 10, 0.95);
-      padding: 30px;
-      border-radius: 25px;
-      color: #ffffff;
-      font-size: 1.6em;
-      z-index: 10;
-      border: 3px solid #00ffcc;
-      box-shadow: 0 0 35px #00ffcc, 0 0 45px #ff0040;
-    }
-    #message-form {
-      position: fixed;
-      bottom: 320px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 90%;
-      display: flex;
-      gap: 10px;
-    }
-    #message-form input {
-      flex: 1;
-      padding: 20px;
-      font-size: 1em;
-      border: none;
-      border-radius: 10px;
-    }
-    #message-form button {
-      padding: 20px 25px;
-      background: #00b7ff;
-      border: none;
-      border-radius: 10px;
-      color: #fff;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 0 15px #00b7ff;
+      animation: floatUp linear infinite;
+      z-index: 1;
     }
     @keyframes floatUp {
-      0% { transform: translateY(120vh) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(-150vh) rotate(720deg); opacity: 0; }
+      from { transform: translateY(100vh) rotate(0deg); }
+      to { transform: translateY(-200vh) rotate(360deg); }
     }
-    @keyframes pop {
-      0% { transform: scale(1); }
-      100% { transform: scale(1.1); }
+    #countdown {
+      text-align: center;
+      font-size: 2em;
+      margin-top: 10px;
+      position: relative;
+      z-index: 2;
     }
-    canvas {
+    .message-box {
       position: fixed;
-      top: 0;
-      left: 0;
+      bottom: 2vh;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 4;
+      background: rgba(0,0,0,0.8);
+      padding: 15px;
+      border: 2px solid #00ffcc;
+      border-radius: 10px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px;
+      font-size: 1em;
+    }
+    #messages {
+      position: absolute;
       width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: -1;
+      height: 60%;
+      bottom: 0;
+      overflow: hidden;
+      color: #0ff;
+      font-size: 1.2em;
+      animation: scrollUp linear infinite 60s;
+      z-index: 2;
+    }
+    @keyframes scrollUp {
+      0% { transform: translateY(100%); }
+      100% { transform: translateY(-200%); }
     }
   </style>
 </head>
 <body>
-  <canvas id="confetti"></canvas>
-  <h1>Happy Birthday Brandon!</h1>
-  <div id="countdown"></div>
-  <div class="image-flow" id="image-flow"></div>
-  <form id="message-form">
-    <input type="text" id="message-input" placeholder="Leave Brandon a birthday message...">
-    <button type="submit">Post</button>
-  </form>
-  <div id="messages"></div>
 
-  <script>
-    if (!firebase.apps.length) {
-      firebase.initializeApp({
-        apiKey: "AIzaSyCqjI4VPFJWp-n48HtUpwoE2wHgE2ilBOE",
-        authDomain: "brandon-birthday.firebaseapp.com",
-        projectId: "brandon-birthday",
-        storageBucket: "brandon-birthday.appspot.com",
-        messagingSenderId: "830404180267",
-        appId: "1:830404180267:web:644abdfbfbdb80ed6e6d6e",
-        measurementId: "G-LSDTCB15J0"
-      });
+<canvas id="confetti-canvas"></canvas>
+<h1>🎂 Happy Birthday Brandon! 🎂</h1>
+<div id="countdown">Loading countdown...</div>
+
+<script>
+  const imageCount = 30;
+  for (let i = 1; i <= imageCount; i++) {
+    const img = document.createElement('img');
+    img.src = `icons/icon${i}.png`;
+    img.className = 'floating-img';
+    img.style.left = `${Math.random() * 100}vw`;
+    img.style.animationDuration = `${20 + Math.random() * 20}s`;
+    img.style.width = `${180 + Math.random() * 120}px`;
+    document.body.appendChild(img);
+  }
+</script>
+
+<script>
+  const bday = new Date("August 1, 2025 00:00:00").getTime();
+  setInterval(() => {
+    const now = new Date().getTime();
+    const dist = bday - now;
+    const days = Math.floor(dist / (1000 * 60 * 60 * 24));
+    const hrs = Math.floor((dist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const min = Math.floor((dist % (1000 * 60 * 60)) / (1000 * 60));
+    const sec = Math.floor((dist % (1000 * 60)) / 1000);
+    document.getElementById("countdown").innerText =
+      dist > 0 ? `${days}d ${hrs}h ${min}m ${sec}s until Brandon’s Birthday!` : "🎉 It's Brandon’s Birthday Today! 🎉";
+  }, 1000);
+</script>
+
+<div class="message-box">
+  <input id="name" placeholder="Your Name"/>
+  <input id="wish" placeholder="Your Birthday Wish"/>
+  <button onclick="sendWish()">Send Wish</button>
+</div>
+<div id="messages"></div>
+
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCqjI4VPFJWp-n48HtUpwoE2wHgE2ilBOE",
+    authDomain: "brandon-birthday.firebaseapp.com",
+    projectId: "brandon-birthday",
+    storageBucket: "brandon-birthday.appspot.com",
+    messagingSenderId: "830404180267",
+    appId: "1:830404180267:web:644abdfbfbdb80ed6e6d6e",
+    measurementId: "G-LSDTCB15J0"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  function sendWish() {
+    const name = document.getElementById('name').value.trim();
+    const wish = document.getElementById('wish').value.trim();
+    if (name && wish) {
+      db.collection("wishes").add({ name, wish, time: new Date() });
+      document.getElementById('name').value = "";
+      document.getElementById('wish').value = "";
     }
-    const db = firebase.firestore();
+  }
 
-    const countdown = document.getElementById('countdown');
-    const birthday = new Date("August 1, 2025 00:00:00").getTime();
-    setInterval(() => {
-      const now = new Date().getTime();
-      const distance = birthday - now;
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-      countdown.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s until Brandon's Big Day!`;
-    }, 1000);
-
-    const imageFlow = document.getElementById('image-flow');
-    const totalImages = 30;
-    for (let i = 1; i <= totalImages; i++) {
-      const img = document.createElement('img');
-      img.src = `images/image${i}.jpeg`;
-      img.style.top = `${120 + Math.random() * 100}vh`;
-      img.style.left = `${Math.random() * 100}vw`;
-      img.style.animationDelay = `${Math.random() * 50}s`;
-      imageFlow.appendChild(img);
-    }
-
-    const canvas = document.getElementById('confetti');
-    const ctx = canvas.getContext('2d');
-    let confetti = [];
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    function createConfetti() {
-      confetti = [];
-      for (let i = 0; i < 200; i++) {
-        confetti.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          r: Math.random() * 6 + 4,
-          d: Math.random() * 20 + 10,
-          color: `hsl(${Math.random() * 360}, 100%, 60%)`,
-          tilt: Math.random() * 10 - 10,
-          tiltAngle: 0,
-          tiltAngleIncrement: Math.random() * 0.1
-        });
-      }
-    }
-    function drawConfetti() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      confetti.forEach(p => {
-        p.tiltAngle += p.tiltAngleIncrement;
-        p.y += Math.cos(p.d) + 1 + p.r / 2;
-        p.x += Math.sin(p.d);
-        p.tilt = Math.sin(p.tiltAngle - p.r / 3) * 15;
-        ctx.beginPath();
-        ctx.lineWidth = p.r;
-        ctx.strokeStyle = p.color;
-        ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
-        ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
-        ctx.stroke();
-      });
-      requestAnimationFrame(drawConfetti);
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-    createConfetti();
-    drawConfetti();
-
-    const messagesRef = db.collection("messages");
-    const messageForm = document.getElementById("message-form");
-    const messageInput = document.getElementById("message-input");
-    const messagesContainer = document.getElementById("messages");
-
-    messageForm.addEventListener("submit", e => {
-      e.preventDefault();
-      const message = messageInput.value;
-      if (message.trim()) {
-        messagesRef.add({ text: message, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
-        messageInput.value = "";
-      }
-    });
-
-    messagesRef.orderBy("timestamp", "desc").onSnapshot(snapshot => {
-      messagesContainer.innerHTML = "";
-      snapshot.forEach(doc => {
+  db.collection("wishes").orderBy("time", "asc").onSnapshot(snapshot => {
+    const messages = document.getElementById("messages");
+    snapshot.docChanges().forEach(change => {
+      if (change.type === "added") {
+        const d = change.doc.data();
         const div = document.createElement("div");
-        div.textContent = doc.data().text;
-        messagesContainer.appendChild(div);
-      });
+        div.textContent = `🎈 ${d.name}: ${d.wish}`;
+        messages.appendChild(div);
+        messages.scrollTop = messages.scrollHeight;
+      }
     });
-  </script>
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script>
+  const confettiCanvasEl = document.getElementById('confetti-canvas');
+  const confettiInstance = confetti.create(confettiCanvasEl, { resize: true, useWorker: true });
+  setInterval(() => {
+    confettiInstance({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+  }, 3000);
+</script>
+
 </body>
 </html>
