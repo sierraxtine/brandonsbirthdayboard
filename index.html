@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🎉 Happy Birthday Brandon 🎉</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap">
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCqjI4VPFJWp-n48HtUpwoE2wHgE2ilBOE",
+      authDomain: "brandon-birthday.firebaseapp.com",
+      projectId: "brandon-birthday",
+      storageBucket: "brandon-birthday.appspot.com",
+      messagingSenderId: "830404180267",
+      appId: "1:830404180267:web:644abdfbfbdb80ed6e6d6e",
+      measurementId: "G-LSDTCB15J0"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const messagesRef = collection(db, "messages");
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("messageForm");
+      const nameInput = document.getElementById("nameInput");
+      const messageInput = document.getElementById("messageInput");
+      const messageList = document.getElementById("messageList");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const name = nameInput.value.trim();
+        const message = messageInput.value.trim();
+        if (!name || !message) return;
+        await addDoc(messagesRef, {
+          name,
+          message,
+          timestamp: serverTimestamp()
+        });
+        nameInput.value = "";
+        messageInput.value = "";
+      });
+
+      const q = query(messagesRef, orderBy("timestamp", "desc"));
+      onSnapshot(q, (snapshot) => {
+        messageList.innerHTML = "";
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const li = document.createElement("li");
+          li.textContent = `${data.name}: ${data.message}`;
+          messageList.appendChild(li);
+        });
+      });
+    });
+  </script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      font-family: 'Orbitron', sans-serif;
+      background: black;
+      color: #00ffcc;
+    }
+
+    canvas#confetti-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .floating-image {
+      position: absolute;
+      width: 100px;
+      animation: floatUp linear infinite;
+      z-index: 0;
+      opacity: 0.85;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+      }
+      100% {
+        transform: translateY(-200vh) rotate(360deg);
+      }
+    }
+
+    h1 {
+      font-size: 3rem;
+      text-align: center;
+      margin-top: 2rem;
+      color: #00ffff;
+      text-shadow: 0 0 10px #00ffff, 0 0 20px #ff00ff, 0 0 30px #00ffff;
+      animation: neonGlow 2s ease-in-out infinite alternate;
+      z-index: 2;
+      position: relative;
+    }
+
+    @keyframes neonGlow {
+      from {
+        text-shadow: 0 0 10px #00ffff, 0 0 20px #ff00ff;
+      }
+      to {
+        text-shadow: 0 0 30px #00ffff, 0 0 60px #ff00ff;
+      }
+    }
+
+    .message-board {
+      max-width: 700px;
+      margin: 2rem auto;
+      background: rgba(0, 0, 0, 0.8);
+      border: 2px solid #0ff;
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 0 25px #0ff;
+      position: relative;
+      z-index: 2;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      background-color: black;
+      color: #00ffcc;
+      border: 1px solid #0ff;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    button {
+      background-color: #00ffcc;
+      color: black;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #0ff;
+      transition: 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #00cccc;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    ul li {
+      padding: 0.5rem;
+      border-bottom: 1px solid #0ff;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="confetti-canvas"></canvas>
+  <h1>🎉 Leave Brandon a Birthday Message 🎉</h1>
+
+  <div class="message-board">
+    <form id="messageForm">
+      <input id="nameInput" type="text" placeholder="Your Name" required />
+      <textarea id="messageInput" rows="3" placeholder="Your Message" required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+    <ul id="messageList"></ul>
+  </div>
+
+  <!-- Floating Images -->
+  <script>
+    const imgCount = 30;
+    for (let i = 0; i < imgCount; i++) {
+      const img = document.createElement('img');
+      img.src = `./images/img${(i % 30) + 1}.png`;
+      img.className = "floating-image";
+      img.style.left = Math.random() * 100 + "vw";
+      img.style.animationDuration = (20 + Math.random() * 20) + "s";
+      img.style.top = Math.random() * 100 + "vh";
+      document.body.appendChild(img);
+    }
+  </script>
+
+  <!-- Confetti Script -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <script>
+    const confettiCanvas = document.getElementById('confetti-canvas');
+    const myConfetti = confetti.create(confettiCanvas, { resize: true, useWorker: true });
+    setInterval(() => {
+      myConfetti({
+        particleCount: 5,
+        spread: 180,
+        origin: { x: Math.random(), y: Math.random() - 0.2 }
+      });
+    }, 300);
+  </script>
+</body>
+</html>
