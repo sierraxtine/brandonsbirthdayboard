@@ -48,7 +48,6 @@
     }
     .floating-img {
       position: absolute;
-      width: 100px;
       animation: floatUp linear infinite;
       z-index: 0;
     }
@@ -110,7 +109,7 @@
     img.className = 'floating-img';
     img.style.left = `${Math.random() * 100}vw`;
     img.style.animationDuration = `${20 + Math.random() * 20}s`;
-    img.style.width = `${60 + Math.random() * 60}px`;
+    img.style.width = `${120 + Math.random() * 80}px`;
     document.body.appendChild(img);
   }
 </script>
@@ -130,7 +129,7 @@
   }, 1000);
 </script>
 
-<!-- Firebase Message Board -->
+<!-- Message Board -->
 <div class="message-box">
   <input id="name" placeholder="Your Name"/>
   <input id="wish" placeholder="Your Birthday Wish"/>
@@ -175,10 +174,20 @@
   });
 </script>
 
-<!-- Autoplay Music -->
-<audio autoplay loop>
+<!-- Music -->
+<audio id="birthdaySong" loop>
   <source src="Miles.mp3" type="audio/mpeg">
 </audio>
+<script>
+  const song = document.getElementById('birthdaySong');
+  const tryPlay = () => {
+    song.play().catch(() => {});
+    window.removeEventListener('click', tryPlay);
+    window.removeEventListener('mousemove', tryPlay);
+  };
+  window.addEventListener('click', tryPlay);
+  window.addEventListener('mousemove', tryPlay);
+</script>
 
 <!-- Confetti -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
