@@ -168,46 +168,6 @@
   });
 </script>
 
-<audio id="birthdaySong" autoplay loop>
-  <source src="Miles.mp3" type="audio/mpeg">
-  Your browser does not support the audio element.
-</audio>
-
-<script>
-  window.addEventListener("load", () => {
-    const audio = document.getElementById("birthdaySong");
-    const playMusic = () => {
-      audio.play().catch(() => {
-        document.getElementById("manualPlay").style.display = "block";
-      });
-      window.removeEventListener("click", playMusic);
-    };
-    window.addEventListener("click", playMusic);
-  });
-</script>
-
-<button id="manualPlay" style="
-  display: none;
-  position: fixed;
-  top: 10px;
-  left: 10px;
-  z-index: 9999;
-  font-size: 1.2em;
-  padding: 10px;
-  background: #0ff;
-  color: #000;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-">▶️ Play Music</button>
-
-<script>
-  document.getElementById("manualPlay").addEventListener("click", () => {
-    document.getElementById("birthdaySong").play();
-    document.getElementById("manualPlay").style.display = "none";
-  });
-</script>
-
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script>
   const confettiCanvasEl = document.getElementById('confetti-canvas');
