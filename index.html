@@ -102,8 +102,10 @@
     .scroll-container {
       display: flex;
       flex-direction: column;
-      animation: scrollUp 60s linear infinite;
       align-items: center;
+    }
+    .scroll-wrapper {
+      animation: scrollUp 60s linear infinite;
     }
     @keyframes scrollUp {
       0% { transform: translateY(100%); }
@@ -138,7 +140,7 @@
   <input id="wish" placeholder="Your Birthday Wish"/>
   <button onclick="sendWish()">Send Wish</button>
 </div>
-<div id="messages"><div class="scroll-container" id="messageWrapper"></div></div>
+<div id="messages"><div class="scroll-container"><div class="scroll-wrapper" id="messageWrapper"></div></div></div>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 <script>
@@ -173,6 +175,7 @@
     .orderBy("time", "asc")
     .onSnapshot(snapshot => {
       const wrapper = document.getElementById("messageWrapper");
+      const scrollWrapper = wrapper.parentElement;
       wrapper.innerHTML = "";
       snapshot.forEach(doc => {
         const d = doc.data();
@@ -184,6 +187,11 @@
           wrapper.appendChild(div);
         }
       });
+      // restart animation
+      scrollWrapper.style.animation = 'none';
+      void scrollWrapper.offsetHeight; // trigger reflow
+      scrollWrapper.style.animation = null;
+      scrollWrapper.classList.add('scroll-wrapper');
     });
 </script>
 <script>
