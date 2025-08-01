@@ -88,83 +88,47 @@
     #messages {
       position: absolute;
       width: 100%;
-      height: 60%;
-      bottom: 0;
+      top: 160px;
+      bottom: 160px;
       overflow: hidden;
       font-size: 1.2em;
       z-index: 2;
       display: flex;
+      justify-content: center;
+    }
+    .scroll-container {
+      display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: flex-end;
-      padding: 10px;
-      animation: scrollUp linear 60s infinite;
+      animation: scrollUp 60s linear infinite;
     }
     @keyframes scrollUp {
       0% { transform: translateY(100%); }
-      100% { transform: translateY(-200%); }
+      100% { transform: translateY(-100%); }
     }
     .message-entry {
-      padding: 5px 10px;
+      padding: 8px 10px;
       font-weight: bold;
-      animation: colorchange 10s infinite alternate;
-    }
-    @keyframes colorchange {
-      0%   { color: #ff0000; }
-      20%  { color: #ffa500; }
-      40%  { color: #ffff00; }
-      60%  { color: #00ff00; }
-      80%  { color: #00ffff; }
-      100% { color: #ff00ff; }
+      white-space: nowrap;
     }
     @media (max-width: 600px) {
       h1 { font-size: 2em; }
       #countdown { font-size: 1.2em; }
       input, button { font-size: 0.9em; max-width: 90%; }
       .message-box { width: 100%; bottom: 0; }
+      .message-entry { font-size: 0.9em; }
     }
   </style>
 </head>
 <body>
-
 <canvas id="confetti-canvas"></canvas>
 <h1>🎂 Happy Birthday Brandon! 🎂</h1>
 <div id="countdown">Loading countdown...</div>
-
-<script>
-  const imageCount = 30;
-  for (let i = 1; i <= imageCount; i++) {
-    const img = document.createElement('img');
-    img.src = `icons/icon${i}.png`;
-    img.className = 'floating-img';
-    img.style.left = `${Math.random() * 100}vw`;
-    img.style.animationDuration = `${20 + Math.random() * 20}s`;
-    img.style.width = `${180 + Math.random() * 120}px`;
-    document.body.appendChild(img);
-  }
-</script>
-
-<script>
-  const bday = new Date("August 1, 2025 00:00:00").getTime();
-  setInterval(() => {
-    const now = new Date().getTime();
-    const dist = bday - now;
-    const days = Math.floor(dist / (1000 * 60 * 60 * 24));
-    const hrs = Math.floor((dist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const min = Math.floor((dist % (1000 * 60 * 60)) / (1000 * 60));
-    const sec = Math.floor((dist % (1000 * 60)) / 1000);
-    document.getElementById("countdown").innerText =
-      dist > 0 ? `${days}d ${hrs}h ${min}m ${sec}s until Brandon’s Birthday!` : "🎉 It's Brandon’s Birthday Today! 🎉";
-  }, 1000);
-</script>
-
 <div class="message-box">
   <input id="name" placeholder="Your Name"/>
   <input id="wish" placeholder="Your Birthday Wish"/>
   <button onclick="sendWish()">Send Wish</button>
 </div>
-<div id="messages"></div>
-
+<div id="messages"><div class="scroll-container" id="messageWrapper"></div></div>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 <script>
@@ -184,33 +148,72 @@
     const name = document.getElementById('name').value.trim();
     const wish = document.getElementById('wish').value.trim();
     if (name && wish) {
-      db.collection("wishes").add({ name, wish, time: new Date() });
+      db.collection("wishes").add({ name, wish, time: firebase.firestore.FieldValue.serverTimestamp() });
       document.getElementById('name').value = "";
       document.getElementById('wish').value = "";
     }
   }
 
-  db.collection("wishes").orderBy("time", "asc").onSnapshot(snapshot => {
-    const messages = document.getElementById("messages");
-    messages.innerHTML = "";
-    snapshot.forEach(doc => {
-      const d = doc.data();
-      const div = document.createElement("div");
-      div.className = "message-entry";
-      div.textContent = `🎈 ${d.name}: ${d.wish}`;
-      messages.appendChild(div);
+  function getRandomColor() {
+    const colors = ['#ff00ff', '#00ffff', '#00ff00', '#ffff00', '#ff9900', '#ff0040'];
+    return colors[Math.floor(Math.random() * colors.length)];
+  }
+
+  db.collection("wishes")
+    .orderBy("time", "asc")
+    .onSnapshot(snapshot => {
+      const wrapper = document.getElementById("messageWrapper");
+      wrapper.innerHTML = "";
+      const messages = [];
+      snapshot.forEach(doc => {
+        const d = doc.data();
+        if (d.name && d.wish) {
+          const div = document.createElement("div");
+          div.className = "message-entry";
+          div.textContent = `🎈 ${d.name}: ${d.wish}`;
+          div.style.color = getRandomColor();
+          messages.push(div.outerHTML);
+        }
+      });
+      wrapper.innerHTML = messages.concat(messages).join("");
     });
+</script>
+<script>
+  const birthday = new Date("August 1, 2025 00:00:00").getTime();
+  setInterval(() => {
+    const now = new Date().getTime();
+    const dist = birthday - now;
+    const days = Math.floor(dist / (1000 * 60 * 60 * 24));
+    const hrs = Math.floor((dist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const min = Math.floor((dist % (1000 * 60 * 60)) / (1000 * 60));
+    const sec = Math.floor((dist % (1000 * 60)) / 1000);
+    document.getElementById("countdown").innerText =
+      dist > 0 ? `${days}d ${hrs}h ${min}m ${sec}s until Brandon’s Birthday!` : "🎉 It's Brandon’s Birthday Today! 🎉";
+  }, 1000);
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const imageCount = 30;
+    for (let i = 1; i <= imageCount; i++) {
+      const img = document.createElement('img');
+      img.src = `icons/icon${i}.png`;
+      img.className = 'floating-img';
+      img.style.left = `${Math.random() * 100}vw`;
+      img.style.animationDuration = `${20 + Math.random() * 20}s`;
+      img.style.width = `${180 + Math.random() * 120}px`;
+      document.body.appendChild(img);
+    }
   });
 </script>
-
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script>
-  const confettiCanvasEl = document.getElementById('confetti-canvas');
-  const confettiInstance = confetti.create(confettiCanvasEl, { resize: true, useWorker: true });
-  setInterval(() => {
-    confettiInstance({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-  }, 3000);
+  window.addEventListener('load', () => {
+    const canvas = document.getElementById('confetti-canvas');
+    const confettiInstance = confetti.create(canvas, { resize: true, useWorker: true });
+    setInterval(() => {
+      confettiInstance({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+    }, 3000);
+  });
 </script>
-
 </body>
 </html>
