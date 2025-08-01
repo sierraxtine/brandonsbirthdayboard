@@ -18,7 +18,7 @@
       position: fixed;
       top: 0; left: 0;
       width: 100vw; height: 100vh;
-      z-index: 1;
+      z-index: 0;
       pointer-events: none;
     }
     h1 {
@@ -29,6 +29,7 @@
       color: #00fff0;
       text-shadow: 1px 1px 0 #0ff, 2px 2px 0 #00f, 3px 3px 0 #0ff, 4px 4px 10px #0ff;
       z-index: 2;
+      position: relative;
     }
     @keyframes glow {
       from { text-shadow: 1px 1px 2px #0ff; }
@@ -44,7 +45,7 @@
     .floating-img {
       position: absolute;
       animation: floatUp linear infinite;
-      z-index: 0;
+      z-index: 1;
     }
     @keyframes floatUp {
       from { transform: translateY(100vh) rotate(0deg); }
@@ -54,6 +55,8 @@
       text-align: center;
       font-size: 2em;
       margin-top: 10px;
+      position: relative;
+      z-index: 2;
     }
     .message-box {
       position: fixed;
@@ -207,8 +210,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script>
-  const confettiCanvas = document.getElementById('confetti-canvas');
-  const confettiInstance = confetti.create(confettiCanvas, { resize: true, useWorker: true });
+  const confettiCanvasEl = document.getElementById('confetti-canvas');
+  const confettiInstance = confetti.create(confettiCanvasEl, { resize: true, useWorker: true });
   setInterval(() => {
     confettiInstance({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
   }, 3000);
