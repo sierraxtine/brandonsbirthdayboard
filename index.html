@@ -171,22 +171,16 @@
 </audio>
 
 <script>
-  const song = document.getElementById("birthdaySong");
-
-  const unlockAudio = () => {
-    song.play().then(() => {
-      console.log("Audio played successfully.");
-    }).catch(err => {
-      console.log("Autoplay failed, showing manual button.");
-      document.getElementById("manualPlay").style.display = "block";
-    });
-
-    window.removeEventListener("click", unlockAudio);
-    window.removeEventListener("mousemove", unlockAudio);
-  };
-
-  window.addEventListener("click", unlockAudio);
-  window.addEventListener("mousemove", unlockAudio);
+  window.addEventListener("load", () => {
+    const audio = document.getElementById("birthdaySong");
+    const playMusic = () => {
+      audio.play().catch(() => {
+        document.getElementById("manualPlay").style.display = "block";
+      });
+      window.removeEventListener("click", playMusic);
+    };
+    window.addEventListener("click", playMusic);
+  });
 </script>
 
 <button id="manualPlay" style="
@@ -206,15 +200,15 @@
 
 <script>
   document.getElementById("manualPlay").addEventListener("click", () => {
-    song.play();
+    document.getElementById("birthdaySong").play();
     document.getElementById("manualPlay").style.display = "none";
   });
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script>
-  const canvas = document.getElementById('confetti-canvas');
-  const confettiInstance = confetti.create(canvas, { resize: true, useWorker: true });
+  const confettiCanvas = document.getElementById('confetti-canvas');
+  const confettiInstance = confetti.create(confettiCanvas, { resize: true, useWorker: true });
   setInterval(() => {
     confettiInstance({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
   }, 3000);
