@@ -100,7 +100,6 @@
 <h1>🎂 Happy Birthday Brandon! 🎂</h1>
 <div id="countdown">Loading countdown...</div>
 
-<!-- Floating Images -->
 <script>
   const imageCount = 30;
   for (let i = 1; i <= imageCount; i++) {
@@ -109,12 +108,11 @@
     img.className = 'floating-img';
     img.style.left = `${Math.random() * 100}vw`;
     img.style.animationDuration = `${20 + Math.random() * 20}s`;
-    img.style.width = `${120 + Math.random() * 80}px`;
+    img.style.width = `${180 + Math.random() * 120}px`;
     document.body.appendChild(img);
   }
 </script>
 
-<!-- Countdown Timer -->
 <script>
   const bday = new Date("August 1, 2025 00:00:00").getTime();
   setInterval(() => {
@@ -129,7 +127,6 @@
   }, 1000);
 </script>
 
-<!-- Message Board -->
 <div class="message-box">
   <input id="name" placeholder="Your Name"/>
   <input id="wish" placeholder="Your Birthday Wish"/>
@@ -174,7 +171,6 @@
   });
 </script>
 
-<!-- Music -->
 <audio id="birthdaySong" loop>
   <source src="Miles.mp3" type="audio/mpeg">
 </audio>
@@ -189,7 +185,6 @@
   window.addEventListener('mousemove', tryPlay);
 </script>
 
-<!-- Confetti -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script>
   const canvas = document.getElementById('confetti-canvas');
