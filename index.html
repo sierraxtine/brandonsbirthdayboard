@@ -99,24 +99,30 @@
     .scroll-container {
       display: flex;
       flex-direction: column;
-      animation: scrollUp 60s linear infinite;
-      padding-bottom: 100vh;
+      animation: scrollUp 120s linear infinite;
+      padding-bottom: 200vh;
+      align-items: center;
     }
     @keyframes scrollUp {
       0% { transform: translateY(100%); }
       100% { transform: translateY(-100%); }
     }
     .message-entry {
-      padding: 10px 10px;
+      padding: 10px;
       font-weight: bold;
       white-space: nowrap;
+      text-align: center;
     }
     @media (max-width: 600px) {
       h1 { font-size: 2em; }
       #countdown { font-size: 1.2em; }
       input, button { font-size: 0.9em; max-width: 90%; }
       .message-box { width: 100%; bottom: 0; }
-      .message-entry { font-size: 0.9em; }
+      .message-entry { font-size: 1em; padding: 8px; white-space: normal; word-break: break-word; }
+      #messages {
+        top: 200px;
+        bottom: 200px;
+      }
     }
   </style>
 </head>
@@ -176,7 +182,6 @@
           messages.push(div.outerHTML);
         }
       });
-      // Repeat the message list 2x for smooth loop
       wrapper.innerHTML = messages.concat(messages).join("");
     });
 </script>
