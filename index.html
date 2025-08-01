@@ -88,7 +88,7 @@
     #messages {
       position: absolute;
       width: 100%;
-      top: 160px;
+      top: 180px;
       bottom: 160px;
       overflow: hidden;
       font-size: 1.2em;
@@ -100,13 +100,14 @@
       display: flex;
       flex-direction: column;
       animation: scrollUp 60s linear infinite;
+      padding-bottom: 100vh;
     }
     @keyframes scrollUp {
       0% { transform: translateY(100%); }
       100% { transform: translateY(-100%); }
     }
     .message-entry {
-      padding: 8px 10px;
+      padding: 10px 10px;
       font-weight: bold;
       white-space: nowrap;
     }
@@ -175,6 +176,7 @@
           messages.push(div.outerHTML);
         }
       });
+      // Repeat the message list 2x for smooth loop
       wrapper.innerHTML = messages.concat(messages).join("");
     });
 </script>
