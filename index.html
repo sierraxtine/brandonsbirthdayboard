@@ -137,7 +137,7 @@
 <div id="countdown">Loading countdown...</div>
 <div class="message-box">
   <input id="name" placeholder="Your Name"/>
-  <input id="wish" placeholder="Your Birthday Wish"/>
+  <input id="wish" placeholder="Write Message"/>
   <button onclick="sendWish()">Send Wish</button>
 </div>
 <div id="messages"><div class="scroll-container"><div class="scroll-wrapper" id="messageWrapper"></div></div></div>
@@ -204,7 +204,7 @@
     const min = Math.floor((dist % (1000 * 60 * 60)) / (1000 * 60));
     const sec = Math.floor((dist % (1000 * 60)) / 1000);
     document.getElementById("countdown").innerText =
-      dist > 0 ? `${days}d ${hrs}h ${min}m ${sec}s until Brandon’s Birthday!` : "🎉 It's Brandon’s Birthday Today! 🎉";
+      dist > 0 ? `${days}d ${hrs}h ${min}m ${sec}s until Brandon’s Birthday!` : " Brandon’s Birthday Board! ";
   }, 1000);
 </script>
 <script>
